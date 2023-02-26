@@ -1,0 +1,24 @@
+<Project Sdk="Microsoft.VisualStudio.JavaScript.Sdk/0.5.62-alpha">
+  <PropertyGroup>
+    <StartupCommand>npm start</StartupCommand>
+    <JavaScriptTestFramework>Jasmine</JavaScriptTestFramework>
+    <!-- Command to run on project build -->
+    <BuildCommand>
+    </BuildCommand>
+    <!-- Command to create an optimized build of the project that's ready for publishing -->
+    <ProductionBuildCommand>npm run build</ProductionBuildCommand>
+    <!-- Folder where production build objects will be placed -->
+    <BuildOutputFolder>$(MSBuildProjectDirectory)\dist\SmallStoreSystem</BuildOutputFolder>
+  </PropertyGroup>
+  <ItemGroup>
+    <Folder Include="src\app\models\" />
+    <Folder Include="src\app\services\" />
+    <Folder Include="src\environments\" />
+  </ItemGroup>
+  <ItemGroup>
+    <TypeScriptConfiguration Remove="src\NewFolder1\**" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Remove="src\NewFolder1\**" />
+  </ItemGroup>
+</Project>

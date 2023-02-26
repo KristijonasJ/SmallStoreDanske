@@ -1,0 +1,124 @@
+<div class='card'>
+    <div class='card-header'>
+        <div class="col-lg-12">
+            <div class="btn-container">
+                <div>
+                    <strong><label> </label></strong>
+                    &nbsp;&nbsp; <strong><label>{{'Record Counts : '+ recordCount}}</label></strong>
+                </div>
+                <div>
+                    <button type="button"
+                            class="btn btn-primary add-button"
+                            *ngIf="!newProduct && admin"
+                            (click)='addNewProduct()'>
+                        Add
+                    </button>
+                    <button type="button"
+                            class="btn btn-primary submit-button"
+                            *ngIf="newProduct"
+                            (click)='cancelAdding()'>
+                        Cancel
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <form (ngSubmit)="onSubmit()">
+        <div class='table-responsive table-hover table-add' *ngIf="newProduct">
+            <table class='addTable table-bordered table-striped' style="height: 100%; table-layout: fixed;" *ngIf='filterData'>
+                <thead style="font-size: medium; font-weight: normal; background-color:#003f61; color: white;">
+                    <tr>
+                        <th scope="col">Name</th>
+                        <th scope="col">Type</th>
+                        <th scope="col">Price $</th>
+                        <th scope="col">Quantity</th>
+                        <th scope="col"></th>
+
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><input type="text" placeholder="Name" [(ngModel)]="product.name" name="name"></td>
+                        <td><input type="text" placeholder="Type" [(ngModel)]="product.type" name="type"></td>
+                        <td><input type="number" placeholder="Price" [(ngModel)]="product.price" name="price"></td>
+                        <td><input type="number" placeholder="Quantity" [(ngModel)]="product.quantity" name="quantity"></td>
+                        <td><button type="submit">Save</button></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </form>
+
+    <div class='card-body'>
+        <div class='form-inline'>
+            <div class='form-group'>
+                <strong><label style="margin-right: 0.5rem;">Filter by Product Type</label></strong>
+                <select (change)="filterByType(selectedProductType)"
+                        [(ngModel)]="selectedProductType"
+                        class="form-control w-75">
+                    <option value="0">--All--</option>
+                    <option *ngFor="let productType of productTypes"
+                            value={{productType}}>
+                        {{productType}}
+                    </option>
+                </select>
+
+            </div>
+
+        </div>
+        <div class='table-hover' *ngIf="!admin">
+            <table class='viewedTable' style="height: 100%; border-radius: 20px; overflow: hidden;" *ngIf='filterData'>
+                <thead style="font-size: medium; font-weight: normal; background-color:#003f61; color: white;">
+                    <tr>
+                        <th scope="col">Last Viewed</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <ng-container *ngIf="viewedProductNames && viewedProductNames.length > 0">
+                        <tr *ngFor="let item of viewedProductNames">
+                            <td><a [routerLink]="['/product', item]">{{ item }}</a></td>
+                        </tr>
+                    </ng-container>
+                </tbody>
+            </table>
+        </div>
+        <br />
+        <form #form="ngForm"
+              [formGroup]="productForm">
+            <div class='table-responsive table-hover'>
+                <table class='table table-bordered table-striped' style="height: 100%; table-layout: fixed;" *ngIf='filterData'>
+                    <thead style="font-size: medium; font-weight: normal; background-color:#003f61; color: white;">
+                        <tr>
+                            <th scope="col" class="name-column">Name</th>
+                            <th scope="col" class="price-column">Price</th>
+                            <th scope="col" class="quantity-column ">Quantity</th>
+                            <th class="small-col" *ngIf="admin"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <ng-container *ngFor="let item of filterData">
+                            <tr *ngIf="item && item.id !==0">
+                                <td><a [routerLink]="['/product', item.name]" (click)="save(item.id, item.name)">{{item.name}}</a></td>
+                                <td>{{item.price | currency}}</td>
+                                <td>{{item.quantity}}</td>
+                                <td class="text-center">
+                                    <button *ngIf="admin" class="btn btn-delete delete-button" (click)="deleteProduct(item.id)">Delete</button>
+                                    <button *ngIf="admin" (click)="openDialog(item.id)" class="btn btn-edit edit-button">Edit</button>
+                                </td>
+                            </tr>
+                        </ng-container>
+                    </tbody>
+                </table>
+            </div>
+        </form>
+    </div>
+
+    <div class="scroll-to-top"
+         *ngIf="pageYoffset>0">
+        <button class="btn btn-info btn-sm"
+                (click)="scrollToTop()">
+            <span class="glyphicon glyphicon-arrow-up"></span> Top
+        </button>
+    </div>
+</div>
+
